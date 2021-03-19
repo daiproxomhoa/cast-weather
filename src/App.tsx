@@ -1,8 +1,9 @@
 import "./App.css";
 import WeatherBox from "./components/WeatherBox";
 import "./stylesheet.scss";
-function App() {
+
+const App = () => {
   return <WeatherBox />;
-}
+};
 
 export default App;

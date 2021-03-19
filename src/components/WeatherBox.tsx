@@ -1,56 +1,50 @@
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import CloseIcon from "@material-ui/icons/Close";
-import { useCallback } from "react";
+import { debounce } from "lodash";
+import React, { useCallback } from "react";
 import { API } from "../common/API";
 import { fetchData } from "../common/fetch";
-import { debounce } from "lodash";
-import React from "react";
 import { some } from "../common/utils";
-import "./styles.scss";
-import { Typography } from "@material-ui/core";
 import { ReactComponent as NotFound } from "../img/notFound.svg";
 import ContentCard from "./ContentCard";
+import FormControlAutoComplete from "./FormControlAutoComplete";
+import "./styles.scss";
+import { getLabel } from "./utils";
 
 export interface Data {
   locationData: some;
   weatherData: some;
   airPollution: some;
 }
-function WeatherBox() {
+const WeatherBox = () => {
+  
+  const [location, setLocation] = React.useState<some>();
   const [data, setData] = React.useState<Data>();
 
-  const [message, setMessage] = React.useState<string>();
-
-  const search = debounce(
-    async (text: string) => {
-      console.log(text);
-      const locationData = await fetchData(API.getLocation(text), "get");
-      if (locationData.length) {
-        const location = locationData[0];
+  const search = useCallback(
+    debounce(
+      async (value: any) => {
         const [weatherData, airPollution] = await Promise.all([
-          fetchData(API.getWeatherData(location), "get"),
-          fetchData(API.getAirPollution(location), "get"),
+          fetchData(API.getWeatherData(value), "get"),
+          fetchData(API.getAirPollution(value), "get"),
         ]);
         setData({
-          locationData: location,
+          locationData: value,
           weatherData,
           airPollution,
         });
-      } else {
-        setMessage("Location not found");
+      },
+      500,
+      {
+        trailing: true,
+        leading: false,
       }
-    },
-    500,
-    {
-      trailing: true,
-      leading: false,
-    }
+    ),
+    [setData]
   );
 
-  console.log(data);
+  React.useEffect(() => {
+    location && search(location);
+  }, [location, search]);
 
   return (
     <div
@@ -58,39 +52,38 @@ function WeatherBox() {
       style={{ minHeight: "100vh" }}
     >
       <Paper variant="outlined" style={{ padding: "70px 44px", width: 680 }}>
-        <TextField
-          variant="outlined"
-          fullWidth
+        <FormControlAutoComplete
           placeholder="input your location"
-          onChange={(e) => search(e.target.value)}
-          defaultValue="Hanoi"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton style={{ padding: 4 }}>
-                  <CloseIcon style={{ fontSize: 28 }} />
-                </IconButton>
-              </InputAdornment>
-            ),
+          value={location || null}
+          onChange={(e: any, value: any) => {
+            setLocation(value);
           }}
+          fullWidth
+          loadOptions={async (str: string) => {
+            const locationData = await fetchData(API.getLocation(str), "get");
+            return locationData;
+          }}
+          getOptionSelected={(option: any, value: any) => {
+            return option.lat === value.lat && option.lon === value.lon;
+          }}
+          getOptionLabel={getLabel}
+          options={[]}
+          defaultText={"Hanoi"}
         />
 
-        <div className="card m-t-12">
-          <div className={"d-flex p-20"}>
-            {data ? (
-              <ContentCard data={data} />
-            ) : (
-              <div className="d-flex d-flex-column justify-content-center align-items-center flex-1">
-                <NotFound />
-                We could not find weather information for the location above
-              </div>
-            )}
-          </div>
-          <div></div>
-        </div>
+        <Paper variant="outlined" className="card m-t-12 d-flex d-flex-column">
+          {data ? (
+            <ContentCard data={data} />
+          ) : (
+            <div className="d-flex d-flex-column justify-content-center align-items-center flex-1 p-20">
+              <NotFound />
+              We could not find weather information for the location above
+            </div>
+          )}
+        </Paper>
       </Paper>
     </div>
   );
-}
+};
 
 export default WeatherBox;
