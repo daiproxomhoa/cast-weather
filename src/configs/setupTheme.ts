@@ -1,5 +1,5 @@
 import { createMuiTheme, darken, fade } from "@material-ui/core/styles";
-import { PRIMARY, SECONDARY, GREY } from "./colors";
+import { PRIMARY, SECONDARY } from "./colors";
 
 const typography = {
   h1: {

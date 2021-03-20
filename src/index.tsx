@@ -1,7 +1,7 @@
 import { MuiThemeProvider } from "@material-ui/core";
+import { MUI_THEME } from "configs/setupTheme";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { MUI_THEME } from "./common/setupTheme";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 

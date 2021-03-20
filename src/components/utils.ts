@@ -1,4 +1,4 @@
-import { some } from "../common/utils";
+import { some } from "../configs/utils";
 
 export const getTemperateValue = (temp: number, option?: string): number => {
   let tmp;
@@ -38,4 +38,11 @@ export const getStatusAir = (status: number): string => {
       break;
   }
   return text;
+};
+
+export const getNameAvatar = (name: string) => {
+  return name
+    .split(" ")
+    .map((v) => v.slice(0, 1))
+    .join("");
 };

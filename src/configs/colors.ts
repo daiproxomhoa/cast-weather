@@ -1,9 +1,10 @@
-import styles from "./colors.module.scss";
+import styles from "configs/colors.module.scss";
 
 export const {
   BLUE,
   BACKGROUND,
   GREY,
+  GREY_500,
   PINK,
   mobile_width,
   tablet_width,

@@ -4,6 +4,7 @@ $tablet_width: 768px;
 $desktop_width: 1024px;
 $BLUE: #276ef1;
 $GREY: #666666;
+$GREY_500: #3a3b3c;
 $PINK: #cc0066;
 
 @mixin mobile {
@@ -25,6 +26,7 @@ $PINK: #cc0066;
 }
 :export {
   GREY: $GREY;
+  GREY_500: $GREY_500;
   BLUE: $BLUE;
   PINK: $PINK;
   BACKGROUND: $BACKGROUND;

@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["react", "react-hooks","@typescript-eslint"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -33,6 +33,9 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/no-array-index-key": "off",
+    "@typescript-eslint/explicit-function-return-type": {
+      "allowExpressions": true
+    },
     "no-nested-ternary": "off"
   }
 }
