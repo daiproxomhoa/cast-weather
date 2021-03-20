@@ -33,9 +33,6 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/no-array-index-key": "off",
-    "@typescript-eslint/explicit-function-return-type": {
-      "allowExpressions": true
-    },
     "no-nested-ternary": "off"
   }
 }
